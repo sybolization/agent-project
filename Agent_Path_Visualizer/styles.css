@@ -1,0 +1,324 @@
+/* ============================================================
+   Agent 执行流程可视化 -- 样式表
+   ============================================================ */
+
+/* ---------- CSS 变量 ---------- */
+:root {
+  --color-collect: #4A90D9;
+  --color-plan:    #F5A623;
+  --color-execute: #7ED321;
+  --color-report:  #9B59B6;
+  --color-default: #95A5A6;
+  --color-error:   #E74C3C;
+
+  --toolbar-bg:    #444444;
+  --panel-bg:      #555555;
+  --control-bg:    #444444;
+  --border-color:  #333333;
+  --text-color:    #f0f0f0;
+  --text-muted:    #aaaaaa;
+}
+
+/* ---------- 全局重置 ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text-color);
+  background: #333333;
+}
+
+/* ---------- 顶部工具栏 ---------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-right {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.toolbar-divider {
+  color: #ccc;
+  user-select: none;
+}
+
+/* 文件选择按钮伪装 */
+.file-label {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #e8e8e8;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #222;
+  transition: background 0.15s;
+}
+
+.file-label:hover {
+  background: #d0d0d0;
+}
+
+.file-label input[type="file"] {
+  display: none;
+}
+
+/* 拖拽提示区域 */
+.drop-hint {
+  padding: 6px 16px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.drop-hint.drag-over {
+  border-color: var(--color-collect);
+  color: var(--color-collect);
+  background: rgba(74, 144, 217, 0.05);
+}
+
+/* ---------- 中间主区域 ---------- */
+.main-area {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+#timelineCanvas {
+  display: block;
+}
+
+/* ---------- 右侧详情面板 ---------- */
+#detailPanel {
+  width: 320px;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--panel-bg);
+  flex-shrink: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e8e8e8; /* 高对比度浅色文字 */
+}
+
+#detailPanel strong {
+  color: #fff; /* 加粗文字更亮 */
+}
+
+#detailPanel p {
+  color: #ddd; /* 段落文字清晰可见 */
+  margin: 4px 0;
+}
+
+.detail-placeholder {
+  color: #aaa;
+  text-align: center;
+  margin-top: 60px;
+}
+
+#detailPanel pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  background: #2a2a2a; /* 更深的代码背景 */
+  color: #e0e0e0; /* 高对比度代码文字 */
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+/* ---------- 底部控制栏 ---------- */
+.control-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--control-bg);
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.control-divider {
+  color: #ccc;
+  user-select: none;
+  margin: 0 4px;
+}
+
+/* ---------- 按钮 ---------- */
+button {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: #e8e8e8;
+  cursor: pointer;
+  font-size: 14px;
+  color: #222;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+button:hover {
+  background: #d0d0d0;
+}
+
+button:active {
+  background: #b0b0b0;
+}
+
+button.playing {
+  background: var(--color-collect);
+  color: #fff;
+  border-color: var(--color-collect);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 144, 217, 0.4); }
+  50%      { box-shadow: 0 0 0 6px rgba(74, 144, 217, 0); }
+}
+
+/* ---------- 选择器 ---------- */
+select {
+  padding: 6px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: #e8e8e8;
+  font-size: 13px;
+  color: #222;
+  cursor: pointer;
+}
+
+/* ---------- 进度条 ---------- */
+#progressBar {
+  flex: 1;
+  max-width: 300px;
+  accent-color: var(--color-collect);
+}
+
+/* ---------- 位置标签 ---------- */
+#positionLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 60px;
+  text-align: right;
+}
+
+/* ---------- 详情面板：元数据 ---------- */
+.detail-meta p {
+  margin: 4px 0;
+  font-size: 13px;
+}
+
+/* ---------- 详情面板：数据展示 ---------- */
+.detail-data {
+  font-size: 11px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: #f0f0f0;
+  padding: 8px;
+  border-radius: 4px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* ---------- Canvas 滚动容器 ---------- */
+#canvasWrapper {
+  background: #606060;
+  border-right: 1px solid #555;
+}
+
+#timelineCanvas {
+  background: #606060;
+}
+
+/* ---------- Tooltip ---------- */
+.node-tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px 14px;
+  max-width: 280px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.node-tooltip.visible {
+  opacity: 1;
+}
+
+.node-tooltip .tt-title {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.node-tooltip .tt-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 3px 0;
+}
+
+.node-tooltip .tt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.node-tooltip .tt-key {
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+.node-tooltip .tt-val {
+  color: #fff;
+  word-break: break-all;
+}
+
+.node-tooltip .tt-data {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #444;
+  font-size: 11px;
+  color: #ccc;
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

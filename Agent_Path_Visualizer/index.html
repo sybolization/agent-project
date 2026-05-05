@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent 执行流程可视化</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- 顶部工具栏 -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <label class="file-label" for="fileInput">
+        选择文件
+        <input type="file" id="fileInput" accept=".jsonl" multiple>
+      </label>
+      <span class="toolbar-divider">|</span>
+      <div class="drop-hint" id="dropHint">
+        或将 .jsonl 文件拖拽到此处
+      </div>
+    </div>
+    <div class="toolbar-right">
+      已加载事件数: <span id="eventCount">0</span>
+    </div>
+  </div>
+
+  <!-- 中间主区域 -->
+  <div class="main-area">
+    <div id="canvasWrapper" style="overflow:auto; flex:1; min-height:0; background:#606060;">
+      <canvas id="timelineCanvas" style="background:#606060;"></canvas>
+    </div>
+    <div id="detailPanel">
+      <div class="detail-placeholder">点击时间线中的事件查看详情</div>
+    </div>
+  </div>
+
+  <!-- 底部控制栏 -->
+  <div class="control-bar">
+    <button id="btnPrev" title="后退">&lt;&lt;</button>
+    <button id="btnPlay" title="播放/暂停">&#9654;</button>
+    <button id="btnNext" title="前进">&gt;&gt;</button>
+    <span class="control-divider">|</span>
+    <label for="speedSelect">速度:</label>
+    <select id="speedSelect">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="5">5x</option>
+      <option value="10">10x</option>
+    </select>
+    <span class="control-divider">|</span>
+    <button id="btnClear">清空</button>
+    <input type="range" id="progressBar" min="0" max="0" value="0">
+    <span id="positionLabel">- / -</span>
+  </div>
+
+  <div id="nodeTooltip" class="node-tooltip" style="display:none;"></div>
+
+  <script src="app.js?v=9"></script>
+</body>
+</html>
