@@ -1,0 +1,61 @@
+{
+  "test_suite": {
+    "version": "1.0",
+    "description": "CDP Browser Harness Test Suite",
+    "tests": [
+      {
+        "test_id": "cdp-basic-001",
+        "name": "CDP直接控制测试",
+        "description": "Agent使用CDP连接浏览器并获取页面信息",
+        "input": "使用CDP连接到浏览器，然后导航到 https://example.com，获取页面标题和所有可交互元素，告诉我页面上有什么内容。",
+        "expected_tools": ["cdp_connect", "cdp_execute", "cdp_get_state"],
+        "success_criteria": [
+          "响应不为空",
+          "迭代次数大于0",
+          "未使用execute_command工具"
+        ],
+        "disabled_tools": ["execute_command"],
+        "disabled_skill_categories": ["opencli"],
+        "chrome_profile": null,
+        "max_iterations": 15,
+        "timeout": 300
+      },
+      {
+        "test_id": "cdp-selfheal-001",
+        "name": "CDP自愈循环测试",
+        "description": "Agent在缺失函数时使用cdp_edit_helpers添加",
+        "input": "使用CDP连接到浏览器，然后导航到 https://example.com，获取页面上所有链接的文本和URL。如果你需要的函数不存在，请使用 cdp_edit_helpers 添加它。",
+        "expected_tools": ["cdp_connect", "cdp_execute", "cdp_edit_helpers"],
+        "success_criteria": [
+          "响应不为空",
+          "迭代次数大于0"
+        ],
+        "disabled_tools": ["execute_command"],
+        "disabled_skill_categories": ["opencli"],
+        "chrome_profile": null,
+        "max_iterations": 20,
+        "timeout": 400
+      },
+      {
+        "test_id": "cdp-complex-001",
+        "name": "Google搜索小红书测试",
+        "description": "Agent使用CDP在Google搜索小红书并点击笔记",
+        "input": "使用CDP连接到浏览器，然后：1. 导航到 https://www.google.com 2. 使用 cdp_get_state 查看页面状态 3. 在搜索框输入'小红书'并搜索 4. 点击搜索结果中的小红书官网链接 5. 使用 cdp_get_state 查看页面状态，如果有弹窗则关闭它 6. 点击第一个笔记链接。注意：每次页面变化后都应使用 cdp_get_state 查看当前页面状态。",
+        "expected_tools": ["cdp_connect", "cdp_execute", "cdp_get_state"],
+        "success_criteria": [
+          "成功导航到Google",
+          "成功搜索小红书",
+          "成功进入小红书官网",
+          "成功点击笔记链接",
+          "未使用execute_command工具"
+        ],
+        "disabled_tools": ["execute_command"],
+        "disabled_skill_categories": ["opencli"],
+        "chrome_profile": null,
+        "max_iterations": 30,
+        "timeout": 600,
+        "enable_screenshot": false
+      }
+    ]
+  }
+}

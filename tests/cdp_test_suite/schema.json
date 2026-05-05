@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CDP Test Suite Schema",
+  "description": "JSON Schema for CDP Browser Harness Test Suite",
+  "type": "object",
+  "required": ["test_suite"],
+  "properties": {
+    "test_suite": {
+      "type": "object",
+      "required": ["version", "tests"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Test suite version"
+        },
+        "description": {
+          "type": "string",
+          "description": "Test suite description"
+        },
+        "tests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TestCase"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "TestCase": {
+      "type": "object",
+      "required": ["test_id", "name", "input", "success_criteria"],
+      "properties": {
+        "test_id": {
+          "type": "string",
+          "description": "Unique test case identifier",
+          "pattern": "^cdp-[a-z]+-[0-9]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Test case name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Test case description"
+        },
+        "input": {
+          "type": "string",
+          "description": "Test input for the agent"
+        },
+        "expected_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of expected tools to be used"
+        },
+        "success_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of success criteria",
+          "minItems": 1
+        },
+        "disabled_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of tools to disable during test"
+        },
+        "disabled_skill_categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of skill categories to disable"
+        },
+        "chrome_profile": {
+          "type": ["string", "null"],
+          "description": "Chrome profile path or 'default' for system default"
+        },
+        "max_iterations": {
+          "type": "integer",
+          "description": "Maximum iterations for agent",
+          "minimum": 1,
+          "default": 15
+        },
+        "timeout": {
+          "type": "integer",
+          "description": "Timeout in seconds",
+          "minimum": 10,
+          "default": 300
+        }
+      }
+    }
+  }
+}

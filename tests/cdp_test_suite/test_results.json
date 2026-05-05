@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-04-28T19:41:22.848374",
+  "total_tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "results": [
+    {
+      "test_id": "cdp-basic-001",
+      "name": "CDP直接控制测试",
+      "success": true,
+      "iterations": 1,
+      "phase": "DEFAULT",
+      "response_length": 5,
+      "criteria_results": {
+        "响应不为空": true,
+        "迭代次数大于0": true,
+        "未使用execute_command工具": true
+      },
+      "loaded_skills": [],
+      "log_path": "logs\\interactions\\20260428_194059_46f1a077.jsonl",
+      "error": null,
+      "chrome_user_data_dir": "C:\\Users\\sy\\AppData\\Local\\Temp\\chrome_cdp_test_ls3t0gg9",
+      "execution_time": 23.139871
+    }
+  ]
+}
